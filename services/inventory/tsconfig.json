@@ -23,7 +23,7 @@
             "@/*": ["*"]
         }
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "src/schemas/.ts"],
     "exclude": [
         "node_modules"
     ]

@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import morgan from 'morgan';
+import { createInventory, updateInventory } from '@/controllers';
 
 dotenv.config();
 
@@ -12,6 +13,10 @@ app.use([express.json(), cors(), morgan('dev')])
 app.get("/health", (_req, res)=>{
     res.status(200).json({status: "UP"})
 })
+
+// Routes
+app.put("/inventories/:id", updateInventory);
+app.post("/inventories", createInventory);
 
 // 404 handler
 app.use((_req, res)=>{
