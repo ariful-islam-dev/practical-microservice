@@ -1,13 +1,14 @@
 
 import { Request, Response, NextFunction } from "express";
 import prisma from  '@/prisma'
-import { InventoryUpdateDTOSchema } from '@/schemas';
+
 
 const getInventoryById = async(req: Request, res:Response, next:NextFunction)=>{
     try{
 
         //check if the inventory exists
-        const {id}=req.params;
+        const {id} = req.params;
+        console.log(id)
         const inventory = await prisma.inventory.findUnique({
             where: {id},
             select: {

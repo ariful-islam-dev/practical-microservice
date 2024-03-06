@@ -23,8 +23,8 @@ const updateInventory = async(req: Request, res:Response, next:NextFunction)=>{
 
         // find the last history
         const lastHistory = await prisma.history.findFirst({
-            where: {inventoryId: id},
-            orderBy: {createdAt: "desc" }
+            where: { inventoryId: id },
+            orderBy: { createdAt: "desc" }
         });
 
         // Calculate the new quantity
