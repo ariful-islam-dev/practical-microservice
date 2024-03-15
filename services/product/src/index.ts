@@ -14,6 +14,18 @@ app.get("/health", (_req, res)=>{
     res.status(200).json({status: "UP"})
 })
 
+app.use((req, res, next)=>{
+    const allowedOrigins = ['http://localhost:8081', 'http://127.0.0.1:8081'];
+    const origin = req.headers.origin || "";
+
+    if(allowedOrigins.includes(origin)){
+        res.setHeader("Access-Control-Allow-Origin", origin);
+        next();
+    }else{
+        res.status(403).json({message: 'Forbidden'})
+    }
+})
+
 // Routes
  app.get("/products/:id", getProductDetails)
  app.get("/products", getProducts)
@@ -23,6 +35,8 @@ app.get("/health", (_req, res)=>{
 app.use((_req, res)=>{
     res.status(404).json({message: 'Not found'})
 })
+
+
 // Error Handler
 
 app.use((err, _req, res, next)=>{

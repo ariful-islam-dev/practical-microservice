@@ -17,11 +17,11 @@ app.use(helmet())
 // Rate limiting middleware
 const limiter = rateLimit({
     windowMs: 15*60*1000, // 15 minutes
-    max: 100, // limit each IP to 100 request per windowsMs
+    max: 3, // limit each IP to 100 request per windowsMs
     handler: (_req, res)=>{
         res
             .status(429)
-            .json({message: "too many requests, pl;ease try again later"})
+            .json({message: "too many requests, please try again later"})
     },
 });
 

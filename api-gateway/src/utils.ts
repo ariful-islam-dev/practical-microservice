@@ -15,7 +15,10 @@ export const createHandler =(hostname:string, path:string, method: string)=>{
         const {data}= await axios({
             method,
             url,
-            data: req.body
+            data: req.body,
+            headers: {
+                origin: "http://localhost:8081"
+            }
         })
 
         res.json(data)
@@ -36,7 +39,8 @@ export const configureRoute = (app: Express)=>{
         service.routes.forEach(route=>{
             route.methods.forEach(method=>{
                 const handler = createHandler(hostname, route.path, method);
-                app[method](`/api${route.path}`, handler)
+                const endpoint = `/api${route.path}`
+                app[method](endpoint, handler)
             })
         })
     })
