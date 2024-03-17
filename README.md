@@ -1,6 +1,7 @@
 # Practical Microservice
 
 ## Use Technologies
+
 - [x] NodeJS = Programming & Coding
 - [x] Postgresql = Database
 - [x] Redis = Catch
@@ -8,8 +9,8 @@
 - [x] Rabbit MQ = Message Broker
 - [x] Key Cloak = Authentication Service Maintains
 
-
 ## Services
+
 - [x] <b>Auth</b>
   - [ ] Creating new users
   - [ ] Authentication
@@ -20,7 +21,7 @@
   - [ ] Managing user profile information
   - [ ] A new user profile will be created upon registration
   - [ ] Auth service call this service to create a new user profile
-- [x] <b>Catalog</b>
+- [x] <b>Product</b>
   - [ ] Create products
   - [ ] Create Inventory
   - [ ] Fetch all products
@@ -43,24 +44,27 @@
 - [x] <b>Email</b>
   - [ ] Send email with given payloads
   - [ ] Store history of the email
-  
+
 ## Foder Structure
+
 ```
 
 ├── Services
-|  ├── auth      
-|  ├── Catalog
+|  ├── auth
+|  ├── Product
 |  ├── Inventory
+|  ├── User
 |  |
-├── Api-gateway 
+├── Api-gateway
 |  |  └── package.json
-├── .gitignore          
-├── docker-compose.yaml      
+├── .gitignore
+├── docker-compose.yaml
 └── README.md
 
 ```
 
-## Tools 
+## Tools
+
 1. <b>Docker</b>
    1. Redis
    2. RabbitMQ
@@ -68,4 +72,3 @@
 2. <b>PostgreSQL</b>
    1. Prisma
 3. <b>TypeScript</b>
-
