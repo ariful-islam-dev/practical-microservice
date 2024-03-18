@@ -2,12 +2,17 @@
 import { z} from 'zod';
 
 export const UserCreateDTOSchema = z.object({
-    authUserId: z.string(),
-    name: z.string(),
     email: z.string().email(),
-    address: z.string().optional(),
-    phone: z.string().optional()
+    password: z.string().min(6).max(255),
+    name: z.string().min(3).max(255)
 });
 
-export const UserUpdateDTOSchema = UserCreateDTOSchema.omit({authUserId: true}).partial();
 
+export const UserLoginDTOschema = z.object({
+    email: z.string().email(),
+    password: z.string()
+});
+
+export const AccessTokenDTOSchema=z.object({
+    accessToken: z.string()
+})

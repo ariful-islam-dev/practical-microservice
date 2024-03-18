@@ -44,7 +44,7 @@ app.use((err, _req, res, next)=>{
 })
 
 const port = process.env.PORT || 4004;
-const serviceName = process.env.SERVICE_NAME || "Auth_Service";
+const serviceName = process.env.SERVICE_NAME || "User_Service";
 
 app.listen(port, ()=>{
     console.log(`${serviceName} is running on port ${port}`)

@@ -8,6 +8,8 @@
 - [x] morgan = View Log
 - [x] zod = Validation
 - [ ] Axios
+- [ ] bcryptjs
+- [ ] jsonwebtoken
 
 ## Third Party Typescript Libraries (For Dev Dependencies)
 
@@ -37,3 +39,7 @@
 ```
 
 ## Endpoints
+
+- [x] User Registration
+- [ ] User Login
+- [ ] Token Verification

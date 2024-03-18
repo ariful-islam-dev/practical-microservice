@@ -1,3 +1,4 @@
 
-export {default as createUser} from './createUser';
-export {default as getUserById} from './getUserById'
+export {default as userRegistration} from './userRegistration';
+export {default as userLogin} from './userLogin';
+export {default as verifyToken}from './verifyToken'
