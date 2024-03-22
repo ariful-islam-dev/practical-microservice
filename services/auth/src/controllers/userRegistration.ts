@@ -1,68 +1,98 @@
-import prisma from '@/prisma';
-import { UserCreateDTOSchema } from '@/schemas';
-import { NextFunction, Request, Response } from 'express';
-import bcrypt from 'bcryptjs'
-import axios from 'axios';
-import { USER_SERVICE } from '@/config';
+import prisma from "@/prisma";
+import { UserCreateDTOSchema } from "@/schemas";
+import { NextFunction, Request, Response } from "express";
+import bcrypt from "bcryptjs";
+import axios from "axios";
+import { EMAIL_SERVICE, USER_SERVICE } from "@/config";
 
+const generateVerificationCode = () => {
+  //Get current timestamp in milliseconds
+  const timestamp = new Date().getTime().toString();
 
-const userRegistration= async(req:Request, res:Response, next:NextFunction)=>{
-    try {
+  // Generate a random 2-digit number
+  const randomNum = Math.floor(10 + Math.random() * 90);
 
-        // Validate the request Body
-        const parsedBody = UserCreateDTOSchema.safeParse(req.body);
+  //combine timestamp and random number and extract last 5 digits
+  let code = (timestamp + randomNum).slice(-5);
 
-        if(!parsedBody.success){
-            return res.status(400).json({error: parsedBody.error.errors});
-        };
-        //check if the user already exists
-        const existingUser = await prisma.user.findUnique({
-            where:{
-                email: parsedBody.data.email
-            }
-        });
+  return code;
+};
 
-        if(existingUser){
-            return res.status(400).json({message: 'User already exists'});
-        }
+const userRegistration = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // Validate the request Body
+    const parsedBody = UserCreateDTOSchema.safeParse(req.body);
 
-        // hash the password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(parsedBody.data.password, salt);
+    if (!parsedBody.success) {
+      return res.status(400).json({ error: parsedBody.error.errors });
+    }
+    //check if the user already exists
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email: parsedBody.data.email,
+      },
+    });
 
-        // create the auth user
-        const user = await prisma.user.create({
-            data: {
-                ...parsedBody.data,
-                password: hashedPassword
-            },
-            select: {
-                id: true,
-                email: true,
-                name: true,
-                role: true,
-                status: true,
-                verified: true
-            }
-        });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
 
-        console.log("User Created:", user);
-        // create the user profile by calling the user service
-        await axios.post(`${USER_SERVICE}/users`, {
-            authUserId: user.id,
-            name: user.name,
-            email: user.email
-        })
+    // hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(parsedBody.data.password, salt);
 
-        // TODO: generate verification code
-        // TODO: send verification email
+    // create the auth user
+    const user = await prisma.user.create({
+      data: {
+        ...parsedBody.data,
+        password: hashedPassword,
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        status: true,
+        verified: true,
+      },
+    });
 
-        return res.status(201).json(user)
+    // create the user profile by calling the user service
+    await axios.post(`${USER_SERVICE}/users`, {
+      authUserId: user.id,
+      name: user.name,
+      email: user.email,
+    });
 
-        
-    } catch (error) {
-        next(error)  
-    } 
-}
+    // generate verification code
+    const code = generateVerificationCode();
+    await prisma.verificationCode.create({
+      data: {
+        userId: user.id,
+        code,
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24), // 24 hours
+      },
+    });
+    console.log("User Created:", user);
+    // send verification email
+    await axios.post(`${EMAIL_SERVICE}/emails/send`, {
+      recipient: user.email,
+      subject: "Email Verification",
+      body: `Your verification code is ${code}`,
+      source: "user-registration",
+    });
+
+    return res.status(201).json({
+      message: "User created. Check your email for verification code",
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export default userRegistration;
