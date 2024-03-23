@@ -20,7 +20,7 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'USER',
-    "varified" BOOLEAN NOT NULL DEFAULT false,
+    "verified" BOOLEAN NOT NULL DEFAULT false,
     "status" "AccountStatus" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

@@ -1,9 +1,8 @@
 import { EMAIL_SERVICE } from "@/config";
 import prisma from "@/prisma";
-import { AccessTokenDTOSchema, EmailVerificationSchema } from "@/schemas";
+import { EmailVerificationSchema } from "@/schemas";
 import axios from "axios";
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
 
 const verifyEmail = async (req: Request, res: Response, next: NextFunction) => {
   try {

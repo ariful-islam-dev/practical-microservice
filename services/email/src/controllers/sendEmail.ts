@@ -1,4 +1,4 @@
-import { defaultSender } from "../config";
+import { defaultSender } from "@/config";
 import { transporter } from "@/config";
 import prisma from "@/prisma";
 import { EmailCreateSchema } from "@/schemas";
@@ -14,10 +14,10 @@ const sendEmail = async (req: Request, res: Response, next: NextFunction) => {
 
     // create mail option
     const { sender, recipient, subject, body, source } = parsedBody.data;
-    const form = sender || defaultSender;
+    const from = sender || defaultSender;
 
     const emailOption = {
-      form,
+      from,
       to: recipient,
       subject,
       text: body,
@@ -26,15 +26,14 @@ const sendEmail = async (req: Request, res: Response, next: NextFunction) => {
     // Send the email
 
     const { rejected } = await transporter.sendMail(emailOption);
-    console.log("parse Body:", parsedBody);
     if (rejected.length) {
-      console.log(rejected);
+      console.log("Email rejected", rejected);
       return res.status(500).json({ message: "Failed" });
     }
 
     await prisma.email.create({
       data: {
-        sender: form,
+        sender: from,
         recipient,
         subject,
         body,
