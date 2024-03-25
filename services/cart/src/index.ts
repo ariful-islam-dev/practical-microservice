@@ -3,27 +3,12 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
-import { configureRoute } from "./utils";
+import { addToCart, getMyCart } from "./controllers";
+import "./events/onKeyExpires";
 
 dotenv.config();
 
 const app = express();
-
-// Security middleware
-app.use(helmet());
-
-// Rate limiting middleware
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 request per windowsMs
-  handler: (_req, res) => {
-    res
-      .status(429)
-      .json({ message: "too many requests, please try again later" });
-  },
-});
-
-app.use("/api", limiter);
 
 // request logger
 app.use([morgan("dev"), express.json()]);
@@ -31,7 +16,9 @@ app.use([morgan("dev"), express.json()]);
 // TODO: Auth Middleware
 
 // routes
-configureRoute(app);
+app.post("/cart/add-to-cart", addToCart);
+app.get("/cart/me", getMyCart);
+
 // Health check
 app.get("/health", (_req, res) => {
   res.status(200).json({ status: "UP" });
@@ -47,8 +34,9 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ message: "Internal Server Error" });
 });
 
-const port = process.env.PORT || 8081;
+const port = process.env.PORT || 4006;
+const serviceName = process.env.SERVICE_NAME || "Cart_Service";
 
 app.listen(port, () => {
-  console.log(`API Gateway is running on port ${port}`);
+  console.log(`${serviceName} is running on port ${port}`);
 });
