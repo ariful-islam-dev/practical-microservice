@@ -25,6 +25,10 @@
     npx prisma init --datasource-provider postgresql
 ```
 
+```Run this Command
+    yarn migrate:dev
+```
+
 ## Endpoints
 
 - [x] POST /products - Create a new product

@@ -1,4 +1,4 @@
-# Inventory Service
+# USER Service
 
 ## Third Party Libraries
 
@@ -22,6 +22,10 @@
 - [ ] @prisma/client
 
 ```Run this Command
+    yarn
+```
+
+```Run this Command
     npx prisma init --datasource-provider postgresql
 ```
 
@@ -30,8 +34,3 @@
 ```
 
 ## Endpoints
-
-- [x] POST/inventories - Create a new inventory
-- [x] PUT/inventories/:id - Update inventory
-- [x] GET/inventories/:id - Fetch inventory
-- [x] GET/inventories/:id/details - Fetch inventory details

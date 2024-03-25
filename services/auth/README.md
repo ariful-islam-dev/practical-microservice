@@ -1,4 +1,4 @@
-# Inventory Service
+# Auth Service
 
 ## Third Party Libraries
 
@@ -7,6 +7,9 @@
 - [x] dotenv = Environment
 - [x] morgan = View Log
 - [x] zod = Validation
+- [ ] Axios
+- [ ] bcryptjs
+- [ ] jsonwebtoken
 
 ## Third Party Typescript Libraries (For Dev Dependencies)
 
@@ -22,8 +25,14 @@
 - [ ] @prisma/client
 
 ```Run this Command
+    yarn
+```
+
+```Run this Command
     npx prisma init --datasource-provider postgresql
 ```
+
+<p>After Creating a prisma Model</p>
 
 ```Run this Command
     yarn migrate:dev
@@ -31,7 +40,6 @@
 
 ## Endpoints
 
-- [x] POST/inventories - Create a new inventory
-- [x] PUT/inventories/:id - Update inventory
-- [x] GET/inventories/:id - Fetch inventory
-- [x] GET/inventories/:id/details - Fetch inventory details
+- [x] User Registration
+- [ ] User Login
+- [ ] Token Verification
