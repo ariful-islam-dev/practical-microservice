@@ -21,7 +21,7 @@ const clearCart = async (req: Request, res: Response, next: NextFunction) => {
 
     delete req.headers["x-cart-session-id"];
 
-    res.status(200).json({ message: "Cart is clear" });
+    return res.status(200).json({ message: "Cart is clear" });
   } catch (error) {
     next(error);
   }
