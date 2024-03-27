@@ -36,13 +36,15 @@ const addToCart = async (req: Request, res: Response, next: NextFunction) => {
 
     // check if the inventory is available
     const { data } = await axios.get(
-      `${INVENTORY_SERVICE_URL}/inventory/${parseBody.data.inventoryId}`
+      `${INVENTORY_SERVICE_URL}/inventories/${parseBody.data.inventoryId}`
     );
     if (Number(data.quantity) < parseBody.data.quantity) {
       return res.status(400).json({ message: "Inventory not available" });
     }
 
     // add item to cart
+    // TODO: Check if the product already exists in the cart
+    // Logic: parseBody.data.quantity - existingQuantity
     await redis.hset(
       `cart:${cartSessionId}`,
       parseBody.data.productId,
@@ -52,11 +54,18 @@ const addToCart = async (req: Request, res: Response, next: NextFunction) => {
       })
     );
 
+    //update the inventory
+    await axios.put(
+      `${INVENTORY_SERVICE_URL}/inventories/${parseBody.data.inventoryId}`,
+      {
+        quantity: parseBody.data.quantity,
+        actionType: "OUT",
+      }
+    );
+
     return res
       .status(200)
       .json({ message: "Item added to cart", cartSessionId });
-
-    //TODO: update the inventory
   } catch (error) {
     next(error);
   }

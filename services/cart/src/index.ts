@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
-import { addToCart, getMyCart } from "./controllers";
+import { addToCart, clearCart, getMyCart } from "./controllers";
 import "./events/onKeyExpires";
 
 dotenv.config();
@@ -18,6 +18,7 @@ app.use([morgan("dev"), express.json()]);
 // routes
 app.post("/cart/add-to-cart", addToCart);
 app.get("/cart/me", getMyCart);
+app.get("/cart/clear", clearCart);
 
 // Health check
 app.get("/health", (_req, res) => {
